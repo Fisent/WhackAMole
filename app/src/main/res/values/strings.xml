@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">WhackAMole</string>
+    <string name="title">Whack a Mole</string>
+    <string name="start">START GAME</string>
+    <string name="score">Score: </string>
+    <string name="gamve_over">Game over</string>
+</resources>
