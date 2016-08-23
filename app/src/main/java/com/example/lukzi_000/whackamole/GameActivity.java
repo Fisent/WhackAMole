@@ -16,7 +16,6 @@ public class GameActivity extends AppCompatActivity {
     public static int score;
     public static boolean game;
     private int time = 1500;
-    private int lives;
     //0 - hole, 1 - mole, 2 - shit
     private ImageView[] tab = new ImageView[9];
     private HashMap<ImageView,Integer> map = new HashMap<>();
@@ -28,8 +27,6 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         score = 0;
-        lives = 3;
-        ((TextView)findViewById(R.id.livesTextView)).setText(lives + "");
         map.put((ImageView)findViewById(R.id.img1),0);
         map.put((ImageView)findViewById(R.id.img2),0);
         map.put((ImageView)findViewById(R.id.img3),0);
@@ -127,15 +124,7 @@ public class GameActivity extends AppCompatActivity {
     {
 
         random();
-        if(countMoles()!=0)
-        {
-            lives--;
-        }
-        if(lives<=0)
-        {
-            startActivity(new Intent(this,GameOverActivity.class));
-        }
-        ((TextView)findViewById(R.id.livesTextView)).setText(lives + "");
+
         actualize();
         time = Matematic.f(countMoles());
     }
