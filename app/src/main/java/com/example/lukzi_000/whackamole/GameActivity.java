@@ -16,6 +16,12 @@ public class GameActivity extends AppCompatActivity {
     public static int score;
     public static boolean game;
     private int time = 1500;
+
+    public boolean plaing;
+    public int lives = 3;
+    //ile jest zielonych w danym momencie
+    public int greenCount = 0;
+
     //0 - hole, 1 - mole, 2 - shit
     private ImageView[] tab = new ImageView[9];
     private HashMap<ImageView,Integer> map = new HashMap<>();
@@ -25,8 +31,10 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        plaing = true;
 
         score = 0;
+        ((TextView)findViewById(R.id.livesTextView)).setText(lives + "");
         map.put((ImageView)findViewById(R.id.img1),0);
         map.put((ImageView)findViewById(R.id.img2),0);
         map.put((ImageView)findViewById(R.id.img3),0);
@@ -93,6 +101,7 @@ public class GameActivity extends AppCompatActivity {
             tab[i].setImageResource(R.drawable.hole);
             map.put(tab[i], 0);
             score++;
+            greenCount--;
         } else {
             startActivity(new Intent(this, GameOverActivity.class));
         }
@@ -100,11 +109,16 @@ public class GameActivity extends AppCompatActivity {
 
     public void random()
     {
+        greenCount = 0;
         for (ImageView img : map.keySet())
         {
             double r = Math.random();
             if(r<0.33)map.put(img,0);
-            else if(r<0.66)map.put(img,1);
+            else if(r<0.66)
+            {
+                map.put(img,1);
+                greenCount++;
+            }
             else map.put(img,2);
         }
     }
@@ -112,6 +126,7 @@ public class GameActivity extends AppCompatActivity {
     public void actualize()
     {
         ((TextView) findViewById(R.id.textView2)).setText(score+"");
+        ((TextView) findViewById(R.id.livesTextView)).setText(lives + "");
         for(ImageView img : map.keySet())
         {
             if(map.get(img)==0) img.setImageResource(R.drawable.hole);
@@ -122,6 +137,15 @@ public class GameActivity extends AppCompatActivity {
 
     public void step()
     {
+        if(greenCount>0)
+        {
+            lives--;
+        }
+        if(plaing && lives<=0)
+        {
+            plaing = false;
+            startActivity(new Intent(this, GameOverActivity.class));
+        }
 
         random();
 
