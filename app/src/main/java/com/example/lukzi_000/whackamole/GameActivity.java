@@ -17,6 +17,8 @@ public class GameActivity extends AppCompatActivity {
     public static boolean game;
     private int time = 1500;
     private int lives;
+    public boolean playing;
+
     //0 - hole, 1 - mole, 2 - shit
     private ImageView[] tab = new ImageView[9];
     private HashMap<ImageView,Integer> map = new HashMap<>();
@@ -26,6 +28,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        playing = true;
 
         score = 0;
         lives = 3;
@@ -131,8 +134,9 @@ public class GameActivity extends AppCompatActivity {
         {
             lives--;
         }
-        if(lives<=0)
+        if(lives<=0 && playing)
         {
+            playing=false;
             startActivity(new Intent(this,GameOverActivity.class));
         }
         ((TextView)findViewById(R.id.livesTextView)).setText(lives + "");
