@@ -18,6 +18,7 @@ public class GameActivity extends AppCompatActivity {
     private int time = 1500;
     private int lives;
     public boolean playing;
+    private int greenCount;
 
     //0 - hole, 1 - mole, 2 - shit
     private ImageView[] tab = new ImageView[9];
@@ -99,6 +100,7 @@ public class GameActivity extends AppCompatActivity {
             tab[i].setImageResource(R.drawable.hole);
             map.put(tab[i], 0);
             score++;
+            greenCount--;
         } else {
             startActivity(new Intent(this, GameOverActivity.class));
         }
@@ -106,17 +108,23 @@ public class GameActivity extends AppCompatActivity {
 
     public void random()
     {
+        greenCount = 0;
         for (ImageView img : map.keySet())
         {
             double r = Math.random();
             if(r<0.33)map.put(img,0);
-            else if(r<0.66)map.put(img,1);
+            else if(r<0.66)
+            {
+                map.put(img,1);
+                greenCount++;
+            }
             else map.put(img,2);
         }
     }
 
     public void actualize()
     {
+
         ((TextView) findViewById(R.id.textView2)).setText(score+"");
         for(ImageView img : map.keySet())
         {
@@ -128,12 +136,13 @@ public class GameActivity extends AppCompatActivity {
 
     public void step()
     {
-
-        random();
-        if(countMoles()!=0)
+        if(greenCount>0)
         {
             lives--;
         }
+
+        random();
+
         if(lives<=0 && playing)
         {
             playing=false;
